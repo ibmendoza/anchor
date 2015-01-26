@@ -1,0 +1,5 @@
+RUN git init
+RUN git .
+RUN git commit -m "rename encore-cmd to anchor"
+RUN git remote add origin https://github.com/ibmendoza/anchor.git
+RUN git push origin master
