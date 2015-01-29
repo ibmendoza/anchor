@@ -47,7 +47,7 @@ Infrastructure as code
 Like developer code, a CM script must be tested and stored in a version control system
 
 
-See https://github.com/ibmendoza/anchor/blob/master/DSL.md for DSL syntax and rules. For subjective reasons, this tool has sole preference for managing Linux-based servers (remote machines) but here is the bonus: you may use Windows as your control machine!
+See https://github.com/ibmendoza/anchor/blob/master/DSL.md for DSL syntax and rules. For subjective reasons, this tool has sole preference for managing Linux-based servers (remote machines) but here is the bonus: you may use Windows as your control machine by using Git Bash (included in GitHub for Windows)
 
 License
 -------
