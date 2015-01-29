@@ -188,7 +188,8 @@ vrdeauthtype = external
 RUNFLAG VBoxManage modifyvm tklinux ::vbox
 
 
-Note: You may use both single and double colon variables in one line (see https://docs.docker.com/reference/commandline/cli)
+Note: You may use both single and double colon variables in one line 
+(see https://docs.docker.com/reference/commandline/cli)
 ```
 
 INCLUDE
