@@ -41,13 +41,22 @@ Dockerfile is simple and intuitive but it is limited to Docker containers only. 
 
 In this specification, that file is called a cmdfile. The CM tool acts as a runtime for this cmdfile written in a specific format or DSL (domain specific language). In effect, the cmdfile serves as data for input for processing by the infrastructure program itself such as Bash, VirtualBox, gcutil, etc.
 
+See https://github.com/ibmendoza/anchor/blob/master/DSL.md for DSL syntax and rules.
+
 Infrastructure as code
 ----------------------
 
-Like developer code, a CM script must be tested and stored in a version control system
+Like developer code, a CM script must be tested and stored in a version control system.
 
+Simple error handling
+---------------------
 
-See https://github.com/ibmendoza/anchor/blob/master/DSL.md for DSL syntax and rules. For subjective reasons, this tool has sole preference for managing Linux-based servers (remote machines) but here is the bonus: you may use Windows as your control machine by using Git Bash (included in GitHub for Windows)
+The CM tool must stop execution at the first occurrence of error. 
+
+Linux-only
+----------
+
+For subjective reasons, this tool is designed for first-class operating system only (Linux) although you can manage your remote Linux servers from a Windows control machine using Git Bash (included in GitHub for Windows).
 
 License
 -------
