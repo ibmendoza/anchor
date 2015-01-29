@@ -18,7 +18,9 @@ Specific tasks can be encapsulated as roles and can be included in a script
 
 - Push-based model
 
-A push-based model of configuration management is easier to reason about. Once you have gathered your artifacts (like source code, binaries, files, images, etc) to your local computer (the so-called control machine), those deployables can be pushed to your remote machine (the one being configured) through SSH
+A push-based model of configuration management is easier to reason about. Once you have gathered your artifacts (like source code, binaries, files, images, etc) to your local computer (the so-called control machine), those deployables can be pushed to your remote machine or host (the one being configured) through SSH. 
+
+Pushing artifacts to multiple hosts in an efficient manner is left to the user or can be relegated to another project as separate orchestration tool.
 
 - Don't reinvent the wheel
 
