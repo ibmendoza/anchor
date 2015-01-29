@@ -5,11 +5,13 @@ Use interface, not leaky abstraction
 
 A CM tool simply invokes the command-line interface (CLI) of a program or runtime (e.g. Bash, Serf, Consul, OpenStack, AWS, gcutil, VBoxManage, etc). 
 
-Chef, Puppet, Ansible and Salt are leaky abstractions like ORM, forever chasing a moving target which is the CLI of programs that actually matter. This is the CM version of the subjective debate between ORM and SQL. A script-based configuration management tool is in the same vein as the SQL argument.
+Chef, Puppet, Ansible and Salt are leaky abstractions like ORM, forever chasing a moving target which is the CLI of programs that actually matter. This is the CM version of the subjective debate between ORM and SQL. A script-based configuration management tool is in the same vein as the SQL argument, just as there is jQuery versus Angular/Ember debate. Bear in mind that software design is inherently subjective.
 
-Don't mistake my viewpoint. If you are fine with your current CM tools, then by all means use it. This is not meant to start a senseless flame war. As I have said before,
+Don't mistake my viewpoint. If you are fine with your current CM tools, then by all means use it. This is not meant to start a senseless flame war. As I have said in my blog http://itjumpstart.wordpress.com,
 
 "Objectivity is falsifiability. Subjectivity is individuality".
+
+Rather than reading this post as a rant against those CM tools, consider this project as an alternative approach to configuration management.
 
 GUI is optional
 ---------------
