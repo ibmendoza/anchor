@@ -1,4 +1,4 @@
-This specification is not yet complete so it is subject to change...
+This specification is not yet complete (subject to change). Note that I designed this spec with Go language in mind. Just ignore Go-specific keywords if you are going to implement this other than Go.
 
 DSL specification (syntax and rules)
 ------------------------------------
