@@ -28,7 +28,11 @@ Your gool old SSH tools like ssh-keygen, ssh-agent, scp and others are enough to
 
 - Infrastructure as data
 
-A CM tool does not assume the role of infrastructure programs like AWS, OpenStack, Proxmox, VirtualBox, Bash, etc. Instead, it leverages the CLI of those programs and define the orchestration script as data in the form of cmdfile. Hence, a CM tool must wrap a thin layer of control logic through a DSL (domain specific language)
+A shell script is the simplest form of infrastructure as data but it has limitations. 
+
+Dockerfile is simple and intuitive but it is limited to Docker containers only. As such, we can write a script file that follows the design of Dockerfile but suitable for configuring physical/virtual machines.
+
+In this specification, that file is called a cmdfile. The CM tool acts as a runtime for this cmdfile written in a specific format or DSL (domain specific language). In effect, the cmdfile serves as data for input for processing by the infrastructure program itself such as Bash, VirtualBox, gcutil, etc.
 
 - Infrastructure as code
 
