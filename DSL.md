@@ -1,7 +1,9 @@
 DSL specification (syntax and rules)
 ------------------------------------
 
-##Comment
+Here is the specification for writing a cmdfile.
+
+#Comment
 
 ```
 # single-line comment
