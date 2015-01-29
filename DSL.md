@@ -1,3 +1,5 @@
+This specification is not yet complete so it is subject to change...
+
 DSL specification (syntax and rules)
 ------------------------------------
 
@@ -137,4 +139,62 @@ RUN sed -i.bak s/^\(VAR5=\).*/\1VALUE10/ file.cfg
 RUN chmod +x cmd.sh
 ```
 
-This specification is not yet complete so it is subject to change...
+RUNFLAG
+
+```
+RUNFLAG
+=======
+
+Makes use of singe/double colon variables to differentiate between single/double dash flags
+
+Case 1 (single colon denotes single dash flag)
+
+http://developer.dnsimple.com/certificates/#configure
+
+curl  -H 'X-DNSimple-Token: <email>:<token>' \
+      -H 'Accept: application/json' \
+      -X PUT \
+      -H 'Content-Type: application/json' \
+      https://api.dnsimple.com/v1/domains/example.com/certificates/2/configure
+	  
+	 
+[curl]
+
+H = 'X-DNSimple-Token: <email>:<token>'
+H = 'Accept: application/json'
+X = PUT
+H = 'Content-Type: application/json'
+
+	 
+[code]
+	 
+RUNFLAG curl https://api.dnsimple.com/v1/domains/example.com/certificates/2/configure :curl
+
+
+
+Case 2 (double colon denotes double dash flag)
+
+
+Command prompt: VBoxManage modifyvm tklinux --vrdeauthtype external
+
+DSL below:
+
+[vbox]
+
+vrdeauthtype = external
+
+[code]
+
+RUNFLAG VBoxManage modifyvm tklinux ::vbox
+
+
+Note: You may use both single and double colon variables in one line (see https://docs.docker.com/reference/commandline/cli)
+```
+
+INCLUDE
+
+```
+INCLUDE /path/to/cmdfile
+
+# executes cmdfile (division of labor)
+```
