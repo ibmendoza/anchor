@@ -5,7 +5,7 @@ Here is the specification for writing a cmdfile.
 
 #Comment
 
-```
+```go
 # single-line comment
 
 # there is no block comment like in Go /* ... */
@@ -15,7 +15,7 @@ Here is the specification for writing a cmdfile.
 
 FROM
 
-```
+```javascript
 FROM <OS name>
 
 # Optional
