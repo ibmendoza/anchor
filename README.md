@@ -33,6 +33,4 @@ A CM tool does not assume the role of infrastructure programs like AWS, OpenStac
 Like developer code, a CM script must be tested and stored in a version control system
 
 
-See DSL.md for DSL syntax and rules.
-
-
+See DSL.md for DSL syntax and rules. For subjective reasons, this tool has sole preference for managing Linux-based servers (remote machines) but here is the bonus: you may use Windows as your control machine!
