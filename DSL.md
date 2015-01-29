@@ -25,7 +25,7 @@ FROM <OS name>
 MAINTAINER
 
 ```
-FROM <OS name>
+MAINTAINER <full name> or <organization>
 
 # Optional
 # Name of cmdfile writer
