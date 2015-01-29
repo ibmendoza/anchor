@@ -5,7 +5,7 @@ Here is the specification for writing a cmdfile.
 
 #Comment
 
-```go
+```
 # single-line comment
 
 # there is no block comment like in Go /* ... */
@@ -15,11 +15,31 @@ Here is the specification for writing a cmdfile.
 
 FROM
 
-```javascript
+```
 FROM <OS name>
 
 # Optional
 # Specify the OS of physical/virtual machine
+```
+
+MAINTAINER
+
+```
+FROM <OS name>
+
+# Optional
+# Name of cmdfile writer
+```
+
+RUN
+
+```script
+RUN VBoxManage modifyvm tklinux -memory 512MB
+RUN echo "Hello world" > /home/go/echoFile.txt
+RUN echo "Hello world2" >> /home/go/echoFile.txt
+RUN echo "Hello world ..."
+RUN sed -i.bak s/^\(VAR5=\).*/\1VALUE10/ file.cfg
+RUN chmod +x cmd.sh
 ```
 
 
