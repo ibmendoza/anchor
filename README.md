@@ -3,7 +3,13 @@ Anchor is a Go-based implementation of my specification for a script-based confi
 Use interface, not leaky abstraction
 ------------------------------------
 
-A CM tool simply invokes the command-line interface (CLI) of a program or runtime (e.g. Bash, Serf, Consul, OpenStack, AWS, gcutil, VBoxManage, etc)
+A CM tool simply invokes the command-line interface (CLI) of a program or runtime (e.g. Bash, Serf, Consul, OpenStack, AWS, gcutil, VBoxManage, etc). 
+
+Chef, Puppet, Ansible and Salt are leaky abstractions like ORM, forever chasing a moving target which is the CLI of programs that actually matter. This is the CM version of the subjective debate between ORM and SQL. A script-based configuration management tool is in the same vein as the SQL argument.
+
+Don't mistake my viewpoint. If you are fine with your current CM tools, then by all means use it. This is not meant to start a senseless flame war. As I have said before,
+
+"Objectivity is falsifiability. Subjectivity is individuality".
 
 GUI is optional
 ---------------
