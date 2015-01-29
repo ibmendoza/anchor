@@ -33,3 +33,6 @@ A CM tool does not assume the role of infrastructure programs like AWS, OpenStac
 Like developer code, a CM script must be tested and stored in a version control system
 
 
+See DSL.md for DSL syntax and rules.
+
+
