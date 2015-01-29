@@ -41,9 +41,6 @@ nic1 = bridged
 nic2 = hostonly
 ```
 
-aws ec2 authorize-security-group-ingress --group-name MySecurityGroup \
-    --ip-permissions file://ip_perms.json
-	
 #Pre section 
 
 ```
