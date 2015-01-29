@@ -11,7 +11,7 @@ Here is the specification for writing a cmdfile.
 # there is no block comment like in Go /* ... */
 ```
 
-#Data variables
+#Data variables section
 
 ```
 # data section must be put above [code] section
