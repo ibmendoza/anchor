@@ -54,7 +54,7 @@ See https://github.com/ibmendoza/anchor/blob/master/DSL.md for DSL syntax and ru
 Infrastructure as code
 ----------------------
 
-Like developer code, a CM script must be tested and stored in a version control system.
+Like developer code, a CM script must be tested and stored in a version control system along with config files, just as a front-end developer stores HTML, CSS, JavaScript files and other artifacts. Large binary files like OS images must be stored elsewhere (file store or object storage)
 
 Simple error handling
 ---------------------
