@@ -1,5 +1,5 @@
 //License: MIT
-//Author: Gani Mendoza (itjumpstart.wordpress.com)
+//Gani Mendoza (itjumpstart.wordpress.com)
 
 package main
 
