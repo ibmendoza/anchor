@@ -1,8 +1,7 @@
 DSL specification (syntax and rules)
-====================================
+------------------------------------
 
-Comment
--------
+##Comment
 
 ```
 # single-line comment
