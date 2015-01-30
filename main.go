@@ -31,10 +31,6 @@ import (
 	"strings"
 )
 
-var (
-	cmdfile ini.File
-)
-
 func printError(err error) {
 
 	if err != nil {
@@ -92,7 +88,7 @@ func runCmd(args string) error {
 	return err
 }
 
-func runflagCmd(args string) error {
+func runflagCmd(args string, cmdfile ini.File) error {
 
 	/*
 		- Flag sections must only include key/value entries
@@ -135,6 +131,8 @@ func runflagCmd(args string) error {
 
 	*/
 
+	var err error
+
 	fmt.Println(args)
 
 	var shell, flag string
@@ -147,7 +145,9 @@ func runflagCmd(args string) error {
 	}
 
 	if strings.Contains(args, ":") && strings.Contains(args, "::") {
-		return errors.New("RUNFLAG cannot contain single and double colon variables")
+		err = errors.New("RUNFLAG cannot contain single and double colon variables")
+		printError(err)
+		return err
 	}
 
 	//address case 1
@@ -386,7 +386,20 @@ func ankoCmd(filename string) error {
 	return err
 }
 
-func processCmd(command string) error {
+func includeCmd(filename string) error {
+	fmt.Println("INCLUDE " + filename)
+
+	err := parseDataThenCode(filename)
+
+	if err != nil {
+		printError(err)
+		return err
+	}
+
+	return err
+}
+
+func processCmd(command string, cmdfile ini.File) error {
 	var err error
 
 	s := strings.TrimSpace(command)
@@ -428,8 +441,11 @@ func processCmd(command string) error {
 		err = ankoCmd(ankoFilename)
 
 	case "RUNFLAG":
-		err = runflagCmd(strings.Join(slcStr[1:], " "))
+		err = runflagCmd(strings.Join(slcStr[1:], " "), cmdfile)
 
+	case "INCLUDE":
+		filename := argCommand
+		err = includeCmd(filename)
 	}
 
 	return err
@@ -492,8 +508,9 @@ func parseIniSections(filename string) string {
 	return strForIniParsing
 }
 
-func parseCode(filename string) {
+func parseCode(filename string, cmdfile ini.File) error {
 	file, err := os.Open(filename)
+	defer file.Close()
 
 	if err != nil {
 		printError(err)
@@ -525,18 +542,40 @@ func parseCode(filename string) {
 					!strings.Contains(line, "]") &&
 					!strings.Contains(line, "=") &&
 					!strings.Contains(line, ";") {
-					err = processCmd(line)
+					err = processCmd(line, cmdfile)
 				}
 			}
 		}
 
 		if err != nil {
 			break
-			log.Fatal(err)
+
+			return err
 		}
 	}
 
-	file.Close()
+	return err
+}
+
+func parseDataThenCode(filename string) error {
+	//the subfunctions are responsible to print error
+
+	str := parseIniSections(filename)
+
+	//convert string to io.Reader
+	input := bytes.NewBufferString(str)
+
+	cmdfile, err := ini.Load(input)
+	if err != nil {
+		return errors.New("Stop parsing data section(s) of " + filename)
+	}
+
+	err = parseCode(filename, cmdfile)
+	if err != nil {
+		return errors.New("Stop parsing code section of " + filename)
+	}
+
+	return err
 }
 
 func main() {
@@ -548,19 +587,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	str := parseIniSections(filename)
+	err := parseDataThenCode(filename)
 
-	//convert string to io.Reader
-	input := bytes.NewBufferString(str)
-
-	var err error
-
-	cmdfile, err = ini.Load(input)
 	if err != nil {
 		printError(err)
 	}
-
-	parseCode(filename)
 
 	fmt.Println("")
 	fmt.Println("If any error appears, cmdfile is not completed")
