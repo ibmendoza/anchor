@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/daviddengcn/go-colortext"
+	"github.com/ibmendoza/go-ini"
 	anko_core "github.com/mattn/anko/builtins"
 	anko_encoding "github.com/mattn/anko/builtins/encoding"
 	anko_flag "github.com/mattn/anko/builtins/flag"
@@ -23,13 +24,15 @@ import (
 	anko_term "github.com/mattn/anko/builtins/term"
 	"github.com/mattn/anko/parser"
 	"github.com/mattn/anko/vm"
-	"github.com/vaughan0/go-ini"
 	"log"
 	"os"
 	"os/exec"
 	"runtime"
 	"strings"
 )
+
+//global variables
+type mapPreVars map[string]string
 
 func printError(err error) {
 
@@ -559,6 +562,21 @@ func parseCmdfile(filename string) error {
 	input := bytes.NewBufferString(str)
 
 	cmdfile, err := ini.Load(input)
+
+	//populate map of pre variables
+	if cmdfile.IsSectionExists("pre") {
+
+		mapPre := make(mapPreVars)
+
+		for key, value := range cmdfile["pre"] {
+
+			mapPre[key] = value
+		}
+
+	}
+
+	//TODO: evaluate pre variables one by one
+
 	if err != nil {
 		return errors.New("Stop parsing ini section(s) of " + filename)
 	}
