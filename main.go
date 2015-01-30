@@ -389,7 +389,7 @@ func ankoCmd(filename string) error {
 func includeCmd(filename string) error {
 	fmt.Println("INCLUDE " + filename)
 
-	err := parseDataThenCode(filename)
+	err := parseCmdfile(filename)
 
 	if err != nil {
 		printError(err)
@@ -557,7 +557,7 @@ func parseCode(filename string, cmdfile ini.File) error {
 	return err
 }
 
-func parseDataThenCode(filename string) error {
+func parseCmdfile(filename string) error {
 	//the subfunctions are responsible to print error
 
 	str := parseIniSections(filename)
@@ -567,7 +567,7 @@ func parseDataThenCode(filename string) error {
 
 	cmdfile, err := ini.Load(input)
 	if err != nil {
-		return errors.New("Stop parsing data section(s) of " + filename)
+		return errors.New("Stop parsing ini section(s) of " + filename)
 	}
 
 	err = parseCode(filename, cmdfile)
@@ -587,7 +587,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	err := parseDataThenCode(filename)
+	err := parseCmdfile(filename)
 
 	if err != nil {
 		printError(err)
