@@ -479,14 +479,8 @@ func parseIniSections(filename string) string {
 				continue
 			}
 
-			if hasReachedCodeSection {
-				if !strings.Contains(line, "#") &&
-					!strings.Contains(line, "[") &&
-					!strings.Contains(line, "]") &&
-					!strings.Contains(line, "=") &&
-					!strings.Contains(line, ";") {
-				}
-			} else {
+			if !hasReachedCodeSection {
+
 				//build string for ini parsing
 				if strings.Contains(line, "[") ||
 					strings.Contains(line, "]") ||
@@ -558,7 +552,6 @@ func parseCode(filename string, cmdfile ini.File) error {
 }
 
 func parseCmdfile(filename string) error {
-	//the subfunctions are responsible to print error
 
 	str := parseIniSections(filename)
 
