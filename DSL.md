@@ -10,7 +10,7 @@ Here is the specification for writing a cmdfile.
 ```
 # single-line comment
 ; so is this
-// and this (golang style)
+# sorry no double slash // (conflicts with AWS-style file reference)
 
 # there is no block comment like in Go /* ... */
 ```
