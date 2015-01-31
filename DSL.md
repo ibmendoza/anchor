@@ -200,4 +200,6 @@ INCLUDE
 INCLUDE /path/to/cmdfile
 
 # executes cmdfile (division of labor)
+# note that cmdfile invoked by INCLUDE executes in its own context
+# that is, it is not seen by other cmdfile, hence it is self-contained
 ```
