@@ -53,7 +53,7 @@ nic2 = hostonly
 # variables to be computed beforehand must be put here
 # Examples include reading environment variables
 
-# save result to variable prefixed with $
+# save result to variable prefixed with @
 # e.g. output of consul keygen etc
 
 # functions are either built-in functions or
@@ -65,8 +65,8 @@ nic2 = hostonly
 # aws ec2 authorize-security-group-ingress --group-name MySecurityGroup \
 # --ip-permissions file://ip_perms.json
 
-$ip_perms = /path/to/file	
-$keygen = consul keygen
+@ip_perms = /path/to/file	
+@keygen = consul keygen
 ```
 
 #Code section
