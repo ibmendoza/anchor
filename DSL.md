@@ -9,6 +9,8 @@ Here is the specification for writing a cmdfile.
 
 ```
 # single-line comment
+; so is this
+// and this (golang style)
 
 # there is no block comment like in Go /* ... */
 ```
