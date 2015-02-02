@@ -7,7 +7,7 @@ A CM tool simply invokes the command-line interface (CLI) of infrastructure soft
 
 Chef, Puppet, Ansible and Salt are leaky abstractions like ORM, forever chasing a moving target which is the CLI of programs that actually matter. This is the CM version of the subjective debate between ORM and SQL. A script-based configuration management tool is in the same vein as the SQL argument, just as there is jQuery versus Angular/Ember debate. Bear in mind that software design is inherently subjective.
 
-Don't mistake my viewpoint. If you are fine with your current CM tools, then by all means use it. This is not meant to start a senseless flame war. As I have said in my blog http://itjumpstart.wordpress.com,
+But don't get me wrong. If you are fine with your current CM tools, then by all means use it. This is not meant to start a senseless flame war. As I have said in my blog http://itjumpstart.wordpress.com,
 
 "Objectivity is falsifiability. Subjectivity is individuality".
 
@@ -28,10 +28,10 @@ Division of labor
 
 Specific tasks can be encapsulated as roles and can be included in a script
 
-Push-based model
-----------------
+Push-based workflow
+-------------------
 
-A push-based model of configuration management is easier to reason about. Once you have gathered your artifacts (like source code, binaries, files, images, etc) to your local computer (the so-called control machine), those deployables can be pushed to your remote machine or host (the one being configured) through SSH. 
+A push-based workflow of configuration management is easier to reason about. Once you have gathered your artifacts (like source code, binaries, files, images, etc) to your local computer (the so-called control machine), those deployables can be pushed to your remote machine/host (the one being configured) through SSH.
 
 Pushing artifacts to multiple hosts in an efficient manner is left to the user or can be relegated to another project as separate orchestration tool.
 
@@ -69,6 +69,15 @@ Linux-only
 ----------
 
 For subjective reasons, this tool is designed for first-class operating system only (Linux) although you can manage your remote Linux servers from a Windows control machine using Git Bash (included in GitHub for Windows).
+
+Usage
+-----
+
+```
+go get github.com/ibmendoza/anchor
+
+anchor /path/to/cmdfile
+```
 
 How you can contribute
 ----------------------
