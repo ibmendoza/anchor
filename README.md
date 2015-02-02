@@ -84,7 +84,7 @@ How you can contribute
 
 - Anchor is a Go-based reference implementation of this script-based configuration management specification. Contribute your ideas. If you do not like Go, write your own implementation using your favorite programming language.
 
-- A community of cmdfile akin to Ansible playbooks. Share your recipes to this repository.
+- A community of cmdfile akin to playbooks and recipes.
 
 
 License
