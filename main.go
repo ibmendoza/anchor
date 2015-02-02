@@ -1,6 +1,59 @@
 //License: MIT
 //Author: Gani Mendoza (itjumpstart.wordpress.com)
 
+/*
+
+Anchor Configuration Management Workflow
+
+Note:
+
+Anchor CM is designed for configuring one machine only
+Configuring multiple machines is up to you (your workflow) OR
+you can delegate it to a separate orchestration tool
+
+Anchor CM is Data Plane
+
+- Anchor CM is data (it is just a sequence of instructions)
+- No conditionals
+- No loop
+
+Orchestration is Control Plane
+
+- Control plane is sequence
+- Control plane has conditional
+- Control plane has loop
+
+Assumption:
+
+Your SSH key has been uploaded and configured accordingly at remote machine
+
+Definitions:
+
+control machine - SSH client
+remote machine - machine to be configured (must be SSH server)
+cmdfile - your virtual script to be executed by Anchor CM
+
+
+1. Prepare cmdfile and other optional files on your control machine
+
+2. SSH to remote machine (using SSH agent recommended)
+
+3. SCP cmdfile and other optional files to remote machine
+
+4. From your local control machine, execute cmdfile at remote machine via SSH
+
+anchor /path/to/cmdfile
+
+Note:
+
+There is only one cmdfile for execution but you can include multiple cmdfiles
+
+5. Debug error displayed on your control machine (if any)
+
+6. Done!
+
+*/
+
 package main
 
 import (
@@ -24,6 +77,7 @@ import (
 	anko_term "github.com/mattn/anko/builtins/term"
 	"github.com/mattn/anko/parser"
 	"github.com/mattn/anko/vm"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -31,8 +85,10 @@ import (
 	"strings"
 )
 
-//global variables
 type mapPreVars map[string]string
+
+//global variables
+var mapPre mapPreVars
 
 func printError(err error) {
 
@@ -60,6 +116,7 @@ func runCmd(args string) error {
 
 	//based on hashicorp serf
 	var shell, flag string
+
 	if runtime.GOOS == "windows" {
 		shell = "cmd"
 		flag = "/C"
@@ -153,41 +210,54 @@ func runflagCmd(args string, cmdfile ini.File) error {
 		return err
 	}
 
+	var strColon, strDash string
 	//address case 1
 	if strings.Contains(args, ":") {
-		slcArgs := strings.Split(args, ":")
-
-		args1 := slcArgs[0]
-		section := slcArgs[1]
-
-		var flags string
-
-		for key, value := range cmdfile[section] {
-			flags = flags + " -" + key + " " + value
-		}
-
-		fmt.Println(args1 + flags)
-
-		args = args1 + flags
+		strColon = ":"
+		strDash = " -"
 	}
 
 	//address case 2
 	if strings.Contains(args, "::") {
-		slcArgs := strings.Split(args, "::")
+		strColon = "::"
+		strDash = " --"
+	}
 
+	//remember that single colon is mutually exlcusive with double colon
+	if strings.Contains(args, strColon) {
+		slcArgs := strings.Split(args, strColon)
+
+		//RUNFLAG VBoxManage modifyvm tklinux ::network
+
+		// RUNFLAG VBoxManage modifyvm tklinux
 		args1 := slcArgs[0]
+
+		// ::network
 		section := slcArgs[1]
 
 		var flags string
 
 		for key, value := range cmdfile[section] {
-			flags = flags + " --" + key + " " + value
+
+			//[network]
+			//nic1 = bridged
+			//nic2 = hostonly
+			//nic3 = @vnic
+
+			val, err := eval(value)
+
+			if err != nil {
+				break
+				printError(err)
+				return err
+
+			} else {
+
+				flags = flags + strDash + key + " " + val
+			}
 		}
 
 		fmt.Println(args1 + flags)
-
-		// Output:
-		// VBoxManage modifyvm tklinux --nic1 bridged --nic2 hostonly
 
 		args = args1 + flags
 	}
@@ -199,6 +269,48 @@ func runflagCmd(args string, cmdfile ini.File) error {
 	printOutput(output)
 
 	return err
+}
+
+//check if value is prefixed with @
+//if not, return that value
+//if @, evaluate if either a file or CLI-based invocation
+
+//[settings]
+//
+
+//[network]
+//nic1 = bridged
+//nic2 = hostonly
+//nic3 = @vnic
+func eval(v string) (string, error) {
+
+	isAt := strings.Contains(v, "@")
+
+	//nic1 = bridged
+	if !isAt {
+		return v, nil
+	}
+
+	//nic3 = @vnic
+	//if @, retrieve its value from mapPre
+
+	_, err := os.Stat(v)
+	if err == nil {
+		//return content of file
+		var fileContent []byte
+
+		fileContent, err = ioutil.ReadFile(v)
+
+		if err != nil {
+			return "", err
+		} else {
+			return string(fileContent), nil
+		}
+	} else {
+
+		//TODO: evaluate
+	}
+	return v, nil
 }
 
 func chdirCmd(dir string) error {
@@ -564,9 +676,13 @@ func parseCmdfile(filename string) error {
 	cmdfile, err := ini.Load(input)
 
 	//populate map of pre variables
+	//for later evaluation when data section is parsed
+
+	//note that pre variables are only applicable
+	//in conjunction with RUNFLAG
 	if cmdfile.IsSectionExists("pre") {
 
-		mapPre := make(mapPreVars)
+		mapPre = make(mapPreVars)
 
 		for key, value := range cmdfile["pre"] {
 
@@ -574,8 +690,6 @@ func parseCmdfile(filename string) error {
 		}
 
 	}
-
-	//TODO: evaluate pre variables one by one
 
 	if err != nil {
 		return errors.New("Stop parsing ini section(s) of " + filename)
