@@ -176,7 +176,7 @@ func runflagCmd(args string, cmdfile ini.File) error {
 
 		[code]
 
-		RUNFLAG sudo docker run -d --name app appserver :docker
+		RUNFLAG sudo docker run -d --name app appserver ?docker
 
 
 		Case 2: double dash flags
@@ -187,7 +187,7 @@ func runflagCmd(args string, cmdfile ini.File) error {
 
 		[code]
 
-		RUNFLAG VBoxManage modifyvm tklinux ::network
+		RUNFLAG VBoxManage modifyvm tklinux *network
 
 	*/
 
@@ -204,30 +204,31 @@ func runflagCmd(args string, cmdfile ini.File) error {
 		flag = "-c"
 	}
 
-	if strings.Contains(args, ":") && strings.Contains(args, "::") {
-		err = errors.New("RUNFLAG cannot contain single and double colon variables")
+	//for docker cli, it's better to use --flags for readability
+
+	if strings.Contains(args, "?") && strings.Contains(args, "*") {
+		err = errors.New("RUNFLAG cannot contain ? and * in the same line")
 		printError(err)
 		return err
 	}
 
 	var strColon, strDash string
 	//address case 1
-	if strings.Contains(args, ":") {
-		strColon = ":"
+	if strings.Contains(args, "?") {
+		strColon = "?"
 		strDash = " -"
 	}
 
 	//address case 2
-	if strings.Contains(args, "::") {
-		strColon = "::"
+	if strings.Contains(args, "*") {
+		strColon = "*"
 		strDash = " --"
 	}
 
-	//remember that single colon is mutually exlcusive with double colon
 	if strings.Contains(args, strColon) {
 		slcArgs := strings.Split(args, strColon)
 
-		//RUNFLAG VBoxManage modifyvm tklinux ::network
+		//RUNFLAG VBoxManage modifyvm tklinux *network
 
 		// RUNFLAG VBoxManage modifyvm tklinux
 		args1 := slcArgs[0]
@@ -527,7 +528,8 @@ func processCmd(command string, cmdfile ini.File) error {
 
 	cmd := strings.ToUpper(slcStr[0])
 
-	if !strings.Contains(cmd, "FROM") || !strings.Contains(cmd, "MAINTAINER") {
+	if !strings.Contains(cmd, "FROM") || !strings.Contains(cmd, "MAINTAINER") ||
+		!strings.Contains(cmd, "LICENSE") {
 		fmt.Println(cmd)
 	}
 
