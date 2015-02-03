@@ -85,6 +85,9 @@ import (
 	"strings"
 )
 
+//global variables
+var shell, flag string
+
 func printError(err error) {
 
 	if err != nil {
@@ -104,21 +107,18 @@ func printOutput(outs []byte) {
 	}
 }
 
+func getShellAndFlag() (string, string) {
+	if runtime.GOOS == "windows" {
+		return "cmd", "/C"
+	} else {
+		return "/bin/sh", "-c"
+	}
+}
+
 func runCmd(args string) error {
 	fmt.Println(args)
 
 	splitSpace := strings.Split(args, " ")
-
-	//based on hashicorp serf
-	var shell, flag string
-
-	if runtime.GOOS == "windows" {
-		shell = "cmd"
-		flag = "/C"
-	} else {
-		shell = "/bin/sh"
-		flag = "-c"
-	}
 
 	var err error
 	switch splitSpace[0] {
@@ -149,7 +149,7 @@ func runflagCmd(args string, cmdfile ini.File) error {
 		- Flag sections must only include key/value entries
 		- To simplify parsing, flag must be either single dash or double dashes
 		- As a consequence of above, do not mix single/double colon variables
-		- E.g. docker -d :singledash ::doubledash (wrong)
+		- E.g. docker -d ?section1 *section2 (wrong)
 
 		https://docs.docker.com/reference/commandline/cli/
 
@@ -190,15 +190,6 @@ func runflagCmd(args string, cmdfile ini.File) error {
 
 	fmt.Println(args)
 
-	var shell, flag string
-	if runtime.GOOS == "windows" {
-		shell = "cmd"
-		flag = "/C"
-	} else {
-		shell = "/bin/sh"
-		flag = "-c"
-	}
-
 	//for docker cli, it's better to use --flags for readability
 
 	if strings.Contains(args, "?") && strings.Contains(args, "*") {
@@ -207,21 +198,21 @@ func runflagCmd(args string, cmdfile ini.File) error {
 		return err
 	}
 
-	var strColon, strDash string
+	var strSymbol, strDash string
 	//address case 1
 	if strings.Contains(args, "?") {
-		strColon = "?"
+		strSymbol = "?"
 		strDash = " -"
 	}
 
 	//address case 2
 	if strings.Contains(args, "*") {
-		strColon = "*"
+		strSymbol = "*"
 		strDash = " --"
 	}
 
-	if strings.Contains(args, strColon) {
-		slcArgs := strings.Split(args, strColon)
+	if strings.Contains(args, strSymbol) {
+		slcArgs := strings.Split(args, strSymbol)
 
 		//RUNFLAG VBoxManage modifyvm tklinux *network
 
@@ -238,7 +229,6 @@ func runflagCmd(args string, cmdfile ini.File) error {
 			//[network]
 			//nic1 = bridged
 			//nic2 = hostonly
-			//nic3 = @vnic
 
 			val, err := eval(value)
 
@@ -267,18 +257,29 @@ func runflagCmd(args string, cmdfile ini.File) error {
 	return err
 }
 
-//check if value is prefixed with @
-//if not, return that value
-//if @, evaluate if either a file or CLI-based invocation
-
-//[settings]
-//
-
-//[network]
-//nic1 = bridged
-//nic2 = hostonly
-//nic3 = @vnic
+//returns itself if plain string otherwise
+//evaluates the command in these cases:
+//case1: if prefixed with @, execute the command
+//case2: if prefixed with built-in function like READFILE, exec it
 func eval(v string) (string, error) {
+	/*
+		[network]
+		nic1 = bridged
+		nic2 = hostonly
+
+		[consul]
+
+		keygen = @consul keygen
+
+		[security]
+
+		# no need to enclose in single or double quote
+
+		pem = READFILE /etc/ssl/certs/cert.pem
+
+	*/
+
+	var err error
 
 	isAt := strings.Contains(v, "@")
 
@@ -287,23 +288,42 @@ func eval(v string) (string, error) {
 		return v, nil
 	}
 
-	_, err := os.Stat(v)
-	if err == nil {
-		//return content of file
-		var fileContent []byte
+	if strings.Contains(v, "READFILE") {
+		slcStr := strings.Split(v, "READFILE")
+		v = strings.TrimSpace(slcStr[1])
 
-		fileContent, err = ioutil.ReadFile(v)
+		_, err = os.Stat(v)
+		if err == nil {
+			//return content of file
+			var fileContent []byte
+
+			fileContent, err = ioutil.ReadFile(v)
+
+			if err != nil {
+				return "", err
+			} else {
+				return string(fileContent), nil
+			}
+		}
+	} else {
+		//v contains @
+		v := strings.Replace(v, "@", "", -1)
+
+		cmd := exec.Command(shell, flag, v)
+
+		var output []byte
+
+		output, err = cmd.CombinedOutput()
 
 		if err != nil {
 			return "", err
 		} else {
-			return string(fileContent), nil
+			return string(output), nil
 		}
-	} else {
-
-		//TODO: evaluate
 	}
-	return v, nil
+
+	//compiler insists a return
+	return "", err
 }
 
 func chdirCmd(dir string) error {
@@ -691,6 +711,8 @@ func main() {
 		printError(errors.New("Please specify a cmdfile"))
 		os.Exit(1)
 	}
+
+	shell, flag = getShellAndFlag()
 
 	err := parseCmdfile(filename)
 
