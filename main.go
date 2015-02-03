@@ -85,11 +85,6 @@ import (
 	"strings"
 )
 
-type mapPreVars map[string]string
-
-//global variables
-var mapPre mapPreVars
-
 func printError(err error) {
 
 	if err != nil {
@@ -291,9 +286,6 @@ func eval(v string) (string, error) {
 	if !isAt {
 		return v, nil
 	}
-
-	//nic3 = @vnic
-	//if @, retrieve its value from mapPre
 
 	_, err := os.Stat(v)
 	if err == nil {
@@ -503,6 +495,8 @@ func ankoCmd(filename string) error {
 }
 
 func includeCmd(filename string) error {
+
+	//can include nested cmdfile
 	fmt.Println("INCLUDE " + filename)
 
 	err := parseCmdfile(filename)
@@ -676,22 +670,6 @@ func parseCmdfile(filename string) error {
 	input := bytes.NewBufferString(str)
 
 	cmdfile, err := ini.Load(input)
-
-	//populate map of pre variables
-	//for later evaluation when data section is parsed
-
-	//note that pre variables are only applicable
-	//in conjunction with RUNFLAG
-	if cmdfile.IsSectionExists("pre") {
-
-		mapPre = make(mapPreVars)
-
-		for key, value := range cmdfile["pre"] {
-
-			mapPre[key] = value
-		}
-
-	}
 
 	if err != nil {
 		return errors.New("Stop parsing ini section(s) of " + filename)
