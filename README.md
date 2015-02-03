@@ -51,10 +51,10 @@ Simple error handling
 
 The CM tool must stop execution at the first occurrence of error. 
 
-Linux-only
-----------
+Linux and Windows
+-----------------
 
-This tool is designed for Linux only although you can manage your remote Linux servers from a Windows control machine using Git Bash (included in GitHub for Windows).
+Anchor can be used to configure Linux and Windows servers.
 
 Usage
 -----
