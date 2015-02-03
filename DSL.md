@@ -131,9 +131,9 @@ RUNFLAG
 RUNFLAG
 =======
 
-Makes use of singe/double colon variables to differentiate between single/double dash flags
+Makes use of ? and * to differentiate between single/double dash flags
 
-Case 1 (single colon denotes single dash flag)
+Case 1 (Question mark denotes single dash flag)
 
 http://developer.dnsimple.com/certificates/#configure
 
@@ -143,6 +143,7 @@ curl  -H 'X-DNSimple-Token: <email>:<token>' \
       -H 'Content-Type: application/json' \
       https://api.dnsimple.com/v1/domains/example.com/certificates/2/configure
 	  
+Here is the cmdfile:
 	 
 [curl]
 
@@ -151,19 +152,18 @@ H = 'Accept: application/json'
 X = PUT
 H = 'Content-Type: application/json'
 
-	 
 [code]
 	 
-RUNFLAG curl https://api.dnsimple.com/v1/domains/example.com/certificates/2/configure :curl
+RUNFLAG curl https://api.dnsimple.com/v1/domains/example.com/certificates/2/configure ?curl
 
 
 
-Case 2 (double colon denotes double dash flag)
+Case 2 (Asterisk denotes double dash flag)
 
 
 Command prompt: VBoxManage modifyvm tklinux --vrdeauthtype external
 
-DSL below:
+Here is the cmdfile:
 
 [vbox]
 
@@ -171,11 +171,33 @@ vrdeauthtype = external
 
 [code]
 
-RUNFLAG VBoxManage modifyvm tklinux ::vbox
+RUNFLAG VBoxManage modifyvm tklinux *vbox
+```
 
+Sample Command
 
-Note: You may use both single and double colon variables in one line 
-(see https://docs.docker.com/reference/commandline/cli)
+NOTE: You cannot use both ? and * in one line 
+
+```
+sudo docker run -d -m 100m -e DEVELOPMENT=1 \
+	-e BRANCH=example-code \
+	-v $(pwd):/app/bin:ro \
+	--name app appserver
+```
+
+can be rewritten as cmdfile like the following.
+
+```
+[docker]
+
+m = 100m
+e = DEVELOPMENT=1
+e = BRANCH=example-code
+v = $(pwd):/app/bin:ro
+
+[code]
+
+RUNFLAG sudo docker run -d --name app appserver ?docker
 ```
 
 INCLUDE
