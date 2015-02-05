@@ -12,3 +12,15 @@ RUNFLAG echo @testvariable
 
 # single-dash flag
 RUNFLAG echo %testvariable
+
+# OUTPUT:
+
+# RUNFLAG
+# echo @testvariable
+# echo --ipaddr 192.168.1.102
+# ==> OUTPUT: --ipaddr 192.168.1.102
+
+# RUNFLAG
+# echo %testvariable
+# echo -ipaddr 192.168.1.102
+# ==> OUTPUT: -ipaddr 192.168.1.102
