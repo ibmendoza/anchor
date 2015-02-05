@@ -1,5 +1,3 @@
-Anchor is under development...not ready for production.
-
 Anchor is a script-based configuration management tool.
 
 Use interface, not leaky abstraction
