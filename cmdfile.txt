@@ -1,5 +1,14 @@
+[testvariable]
+
+ipaddr = RUN ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
+
 [code]
 
 # http://www.cyberciti.biz/faq/how-to-find-out-the-ip-address-assigned-to-eth0-and-display-ip-only/
+# RUN ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
 
-RUN ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
+# double-dash flag
+RUNFLAG echo @testvariable
+
+# single-dash flag
+RUNFLAG echo %testvariable
