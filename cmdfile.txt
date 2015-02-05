@@ -1,5 +1,5 @@
-RUN git init
-RUN git .
-RUN git commit -m "rename encore-cmd to anchor"
-RUN git remote add origin https://github.com/ibmendoza/anchor.git
-RUN git push origin master
+[code]
+
+# http://www.cyberciti.biz/faq/how-to-find-out-the-ip-address-assigned-to-eth0-and-display-ip-only/
+
+RUN ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
