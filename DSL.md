@@ -1,7 +1,7 @@
 This specification is not yet complete (subject to change). Note that I designed this spec with Go language in mind. Just ignore Go-specific keywords if you are going to implement this other than Go.
 
-DSL specification (syntax and rules)
-------------------------------------
+DSL specification 
+-----------------
 
 Here is the specification for writing a cmdfile.
 
@@ -131,11 +131,13 @@ RUNFLAG
 RUNFLAG
 =======
 
-Makes use of ? and * to differentiate between single/double dash flags
+Makes use of % and @ to differentiate between single/double dash flags
 
-Case 1 (Question mark denotes single dash flag)
+Case 1 (% denotes single dash flag)
 
 http://developer.dnsimple.com/certificates/#configure
+
+Example CLI:
 
 curl  -H 'X-DNSimple-Token: <email>:<token>' \
       -H 'Accept: application/json' \
@@ -143,7 +145,8 @@ curl  -H 'X-DNSimple-Token: <email>:<token>' \
       -H 'Content-Type: application/json' \
       https://api.dnsimple.com/v1/domains/example.com/certificates/2/configure
 	  
-Here is the cmdfile:
+
+Corresponding cmdfile:
 	 
 [curl]
 
@@ -154,16 +157,18 @@ H = 'Content-Type: application/json'
 
 [code]
 	 
-RUNFLAG curl https://api.dnsimple.com/v1/domains/example.com/certificates/2/configure ?curl
+RUNFLAG curl https://api.dnsimple.com/v1/domains/example.com/certificates/2/configure %curl
 
 
 
-Case 2 (Asterisk denotes double dash flag)
+Case 2 (@ denotes double dash flag)
 
 
-Command prompt: VBoxManage modifyvm tklinux --vrdeauthtype external
+Example CLI:
 
-Here is the cmdfile:
+VBoxManage modifyvm tklinux --vrdeauthtype external
+
+Corresponding cmdfile:
 
 [vbox]
 
@@ -171,12 +176,12 @@ vrdeauthtype = external
 
 [code]
 
-RUNFLAG VBoxManage modifyvm tklinux *vbox
+RUNFLAG VBoxManage modifyvm tklinux @vbox
 ```
 
 Sample Command
 
-NOTE: You cannot use both ? and * in one line 
+NOTE: You cannot use both % and @ in one line 
 
 ```
 sudo docker run -d -m 100m -e DEVELOPMENT=1 \
@@ -185,7 +190,7 @@ sudo docker run -d -m 100m -e DEVELOPMENT=1 \
 	--name app appserver
 ```
 
-can be rewritten as cmdfile like the following.
+can be rewritten as cmdfile like so:
 
 ```
 [docker]
@@ -197,7 +202,7 @@ v = $(pwd):/app/bin:ro
 
 [code]
 
-RUNFLAG sudo docker run -d --name app appserver ?docker
+RUNFLAG sudo docker run -d --name app appserver %docker
 ```
 
 INCLUDE
