@@ -1,9 +1,37 @@
-Note that I designed this spec with Go language in mind. Just ignore Go-specific keywords if you are going to implement this other than Go.
+Just ignore Go-specific keywords if you are going to implement this other than Go.
 
 DSL specification 
 -----------------
 
-Here is the specification for writing a cmdfile.
+#Cmdfile
+
+```script
+[testvariable]
+ipaddr = RUN ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
+
+[code]
+
+# http://www.cyberciti.biz/faq/how-to-find-out-the-ip-address-assigned-to-eth0-and-display-ip-only/
+# RUN ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
+
+# double-dash flag
+RUNFLAG echo @testvariable
+
+# single-dash flag
+RUNFLAG echo %testvariable
+
+# OUTPUT:
+
+# RUNFLAG
+# echo @testvariable
+# echo --ipaddr 192.168.1.102
+# ==> OUTPUT: --ipaddr 192.168.1.102
+
+# RUNFLAG
+# echo %testvariable
+# echo -ipaddr 192.168.1.102
+# ==> OUTPUT: -ipaddr 192.168.1.102
+```
 
 #Comment
 
