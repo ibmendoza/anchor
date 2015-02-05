@@ -148,8 +148,8 @@ func runflagCmd(args string, cmdfile ini.File) error {
 	/*
 		- Flag sections must only include key/value entries
 		- To simplify parsing, flag must be either single dash or double dashes
-		- As a consequence of above, do not mix single/double colon variables
-		- E.g. docker -d ?section1 *section2 (wrong)
+		- As a consequence of above, do not mix % and @ in one line
+		- E.g. docker -d %section1 @section2 (wrong)
 
 		https://docs.docker.com/reference/commandline/cli/
 
@@ -171,10 +171,14 @@ func runflagCmd(args string, cmdfile ini.File) error {
 
 		[code]
 
-		RUNFLAG sudo docker run -d --name app appserver ?docker
+		RUNFLAG sudo docker run -d --name app appserver %docker
 
 
 		Case 2: double dash flags
+
+		VBoxManage modifyvm tklinux --nic1 bridged --nic2 hostonly
+
+		can be rewritten as
 
 		[network]
 		nic1 = bridged
@@ -182,7 +186,7 @@ func runflagCmd(args string, cmdfile ini.File) error {
 
 		[code]
 
-		RUNFLAG VBoxManage modifyvm tklinux *network
+		RUNFLAG VBoxManage modifyvm tklinux @network
 
 	*/
 
@@ -192,29 +196,29 @@ func runflagCmd(args string, cmdfile ini.File) error {
 
 	//for docker cli, it's better to use --flags for readability
 
-	if strings.Contains(args, "?") && strings.Contains(args, "*") {
-		err = errors.New("RUNFLAG cannot contain ? and * in the same line")
+	if strings.Contains(args, "%") && strings.Contains(args, "@") {
+		err = errors.New("RUNFLAG cannot contain % and @ in the same line")
 		printError(err)
 		return err
 	}
 
 	var strSymbol, strDash string
 	//address case 1
-	if strings.Contains(args, "?") {
-		strSymbol = "?"
+	if strings.Contains(args, "%") {
+		strSymbol = "%"
 		strDash = " -"
 	}
 
 	//address case 2
-	if strings.Contains(args, "*") {
-		strSymbol = "*"
+	if strings.Contains(args, "@") {
+		strSymbol = "@"
 		strDash = " --"
 	}
 
 	if strings.Contains(args, strSymbol) {
 		slcArgs := strings.Split(args, strSymbol)
 
-		//RUNFLAG VBoxManage modifyvm tklinux *network
+		//RUNFLAG VBoxManage modifyvm tklinux @network
 
 		// RUNFLAG VBoxManage modifyvm tklinux
 		args1 := slcArgs[0]
@@ -257,10 +261,7 @@ func runflagCmd(args string, cmdfile ini.File) error {
 	return err
 }
 
-//returns itself if plain string otherwise
-//evaluates the command in these cases:
-//case1: if prefixed with @, execute the command
-//case2: if prefixed with built-in function like READFILE, exec it
+//returns itself if plain string otherwise executes the command
 func eval(v string) (string, error) {
 	/*
 		[network]
@@ -269,7 +270,7 @@ func eval(v string) (string, error) {
 
 		[consul]
 
-		keygen = @consul keygen
+		keygen = RUN consul keygen
 
 		[security]
 
@@ -281,7 +282,8 @@ func eval(v string) (string, error) {
 
 	var err error
 
-	isAt := strings.Contains(v, "@")
+	//READFILE and RUN are reserved words in cmdfile
+	isAt := strings.Contains(v, "READFILE") || strings.Contains(v, "RUN")
 
 	//nic1 = bridged
 	if !isAt {
@@ -305,9 +307,12 @@ func eval(v string) (string, error) {
 				return string(fileContent), nil
 			}
 		}
-	} else {
-		//v contains @
-		v := strings.Replace(v, "@", "", -1)
+	}
+
+	if strings.Contains(v, "RUN") {
+
+		v := strings.Replace(v, "RUN", "", -1)
+		v = strings.TrimSpace(v)
 
 		cmd := exec.Command(shell, flag, v)
 
