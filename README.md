@@ -1,4 +1,4 @@
-Anchor is a script-based configuration management tool.
+Anchor is a script-based configuration management tool that adheres to UNIX philosophy.
 
 Use interface, not leaky abstraction
 ------------------------------------
@@ -15,7 +15,7 @@ Specific tasks can be encapsulated as roles and can be included in a script
 Push-based workflow
 -------------------
 
-A push-based workflow of configuration management is easier to reason about. Once you have gathered your artifacts (like source code, binaries, files, images, etc) to your local computer (the so-called control machine), those deployables can be pushed to your remote machine/host (the one being configured) through SSH.
+A push-based workflow of configuration management is easier to reason about. Once you have gathered your artifacts (like source code, binaries, files, images, etc) to your control machine (local computer or VM in public cloud), those artifacts can be pushed to your remote machine/host (the one being configured) through SSH.
 
 Pushing artifacts to multiple hosts in an efficient manner is left to the user or can be relegated to another project as separate orchestration tool.
 
@@ -31,28 +31,31 @@ A shell script is the simplest form of infrastructure as data but it has limitat
 
 Dockerfile is simple and intuitive but it is limited to Docker containers only. 
 
-Taking a cue from Dockerfile, we can design a script file but not to be executed by your favorite shell. Instead, it will be executed by our CM runtime such that it follows the principles described in this README file.
+Taking a cue from Dockerfile, we can design a script file called but not to be executed by your favorite shell. Instead, it will be executed by our CM runtime such that it follows the principles described in this README file.
 
-The CM runtime serves as control plane while the script file (hereinafter called as cmdfile) serves as data plane. The cmdfile is written in DSL (domain-specific language). In effect, the cmdfile serves as input data for the CM runtime. The actual instruction is then fed to the infrastructure program itself such as Bash, VirtualBox, gcutil, OpenStack etc.
-
-As long as any software exposes a CLI, you can use that to automate a certain process. As a result, the tool remains simple. The secret is in the cmdfile and it is up to you however you like it to organize.
+The cmdfile is a virtual script since it is preprocessed by the CM runtime.
 
 See https://github.com/ibmendoza/anchor/blob/master/DSL.md for DSL syntax and rules.
 
 Infrastructure as code
 ----------------------
 
-Like developer code, a CM script must be tested and stored in a version control system along with config files, just as a front-end developer stores HTML, CSS, JavaScript files and other artifacts. Large binary files like OS images must be stored elsewhere (file store or object storage)
+Like developer code, a cmdfile must be tested and stored in a version control system along with config files and others. Large binary files like OS images must be stored elsewhere (file store or object storage)
 
 Simple error handling
 ---------------------
 
-The CM tool must stop execution at the first occurrence of error. 
+The CM tool must stop execution at the first occurrence of error.
+
+Tool-agnostic
+-------------
+
+Any tool or runtime can be used as long as it exposes a CLI (command line interface). There is no need to prepackage the tool into a CM module since the tool itself acts as the module. Anchor CM is simply a glue that holds and orchestrates a certain process or workflow. Hence, you can use any of your favorite shell or scripting language
 
 Linux and Windows
 -----------------
 
-Anchor can be used to configure Linux and Windows servers.
+Anchor is primarily designed for Linux. Using PowerShell in Windows has not been tested. Your contributions are welcome.
 
 Usage
 -----
@@ -63,12 +66,12 @@ go get github.com/ibmendoza/anchor
 anchor /path/to/cmdfile
 ```
 
-How you can contribute
-----------------------
+How to Contribute
+-----------------
 
-- Write your own implementation using your favorite programming language.
+- Speak out your use cases. I will look into it if it's meant to be included in the Anchor kernel
 
-- A community of cmdfile akin to playbooks and recipes.
+- A community of cmdfile akin to playbooks and recipes. For example, Vagrant workflow can be reduced to cmdfiles
 
 
 License
