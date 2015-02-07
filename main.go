@@ -59,9 +59,11 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/daviddengcn/go-colortext"
+	"github.com/hoisie/mustache"
 	"github.com/ibmendoza/go-ini"
 	anko_core "github.com/mattn/anko/builtins"
 	anko_encoding "github.com/mattn/anko/builtins/encoding"
@@ -534,6 +536,107 @@ func includeCmd(filename string) error {
 	return err
 }
 
+//USAGE: TEMPLATE template file, json file, destination file, shell script file
+//Uses Mustache to render template + json into destination file
+//Optional shell script file to run after completion
+//WARNING: Destination file will be overwritten
+func templateCmd(args string) (err error) {
+
+	slcStr := strings.Split(args, " ")
+
+	if len(slcStr) < 3 || len(slcStr) > 4 {
+
+		err = errors.New("TEMPLATE expects in order: template, json, " +
+			"destination file and optional shell script")
+
+		printError(err)
+
+		return err
+	}
+
+	strTemplate := slcStr[0]
+	strJson := slcStr[1]
+	strDestination := slcStr[2]
+
+	var strShell string
+	if len(slcStr) == 4 {
+		strShell = slcStr[3]
+	}
+
+	var fileContent []byte
+	var jsonData map[string]interface{}
+	var template string
+
+	//read template file
+	fileContent, err = ioutil.ReadFile(strTemplate)
+
+	if err != nil {
+		err = errors.New("Error reading template file named " + strTemplate)
+		printError(err)
+		return err
+	} else {
+		template = string(fileContent)
+	}
+
+	//read json file
+	fileContent, err = ioutil.ReadFile(strJson)
+	if err != nil {
+		err = errors.New("Error reading json file named " + strJson)
+		printError(err)
+		return err
+	} else {
+
+		err := json.Unmarshal(fileContent, &jsonData)
+
+		if err != nil {
+			err = errors.New("Error parsing JSON data file named " + strJson)
+			printError(err)
+			return err
+		}
+	}
+
+	//render mustache template + JSON data
+	rendered := mustache.Render(template, jsonData)
+
+	//write rendered template to file
+	var file *os.File
+	file, err = os.Create(strDestination)
+	defer file.Close()
+	if err != nil {
+		err = errors.New("Error writing to destination file named " + strDestination)
+		printError(err)
+		return err
+	} else {
+		w := bufio.NewWriter(file)
+		_, err := w.WriteString(rendered)
+		if err != nil {
+			err = errors.New("Error writing rendered template to destination file named " + strDestination)
+			printError(err)
+			return err
+		} else {
+			w.Flush()
+		}
+	}
+
+	//execute shell file if any
+	if strShell > "" {
+		_, err = os.Stat(strShell)
+
+		if err != nil {
+			err = errors.New("Shell script file named " + strShell + " does not exist")
+			return err
+		} else {
+			cmd := exec.Command(shell, flag, strShell)
+
+			output, err := cmd.CombinedOutput()
+			printError(err)
+			printOutput(output)
+		}
+	}
+
+	return err
+}
+
 func processCmd(command string, cmdfile ini.File) error {
 	var err error
 
@@ -582,6 +685,10 @@ func processCmd(command string, cmdfile ini.File) error {
 	case "INCLUDE":
 		filename := argCommand
 		err = includeCmd(filename)
+
+	case "TEMPLATE":
+		err = templateCmd(strings.Join(slcStr[1:], " "))
+
 	}
 
 	return err
@@ -726,5 +833,5 @@ func main() {
 	}
 
 	fmt.Println("")
-	fmt.Println("If any error appears, cmdfile is not completed")
+	fmt.Println("If any error appears, cmdfile run is not completed")
 }
