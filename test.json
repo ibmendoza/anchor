@@ -1,0 +1,31 @@
+{
+    "hostname": "testroute",
+    "ntpServer": [
+        {
+            "ip": "10.1.1.1"
+        },
+        {
+            "ip": "11.1.1.1"
+        }
+    ],
+    "vlans": [
+        {
+            "id": "100",
+            "name": "accessvlan"
+        },
+        {
+            "id": "200",
+            "name": "trunkvlan"
+        }
+    ],
+    "misc": {
+        "defaultgw": "40.1.1.1"
+    },
+    "snmp": {
+        "user": "admin",
+        "trap": {
+            "trapServer": "1.1.1.1",
+            "version": "3"
+        }
+    }
+}
