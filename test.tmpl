@@ -1,0 +1,23 @@
+conf
+#hostname config
+hostname {{hostname}}
+
+# ntp server config
+
+{{#ntpServer}}
+ntp server {{ip}}
+{{/ntpServer}}
+
+#vlan config
+{{#vlans}}
+vlan {{id}}
+	name {{name}}
+{{/vlans}}
+
+#default gateway
+{{#misc}}
+ip route 0.0.0.0 0.0.0.0 {{defaultgw}}
+
+snmp-server user {{snmp.user}} 
+snmp-server host {{snmp.trap.trapServer}} version {{snmp.trap.version}}
+{{/misc}}
