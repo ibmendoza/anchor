@@ -1,5 +1,3 @@
-Just ignore Go-specific keywords if you are going to implement this other than Go.
-
 DSL specification 
 -----------------
 
@@ -241,4 +239,14 @@ INCLUDE /path/to/cmdfile
 # executes cmdfile (division of labor)
 # note that cmdfile invoked by INCLUDE executes in its own context
 # that is, it is not seen by other cmdfile, hence it is self-contained
+```
+
+TEMPLATE
+
+```
+[code]
+
+# TEMPLATE template file, json file, destination file, shell script file
+
+TEMPLATE test.tmpl test.json testconfig.txt testecho.bat
 ```
