@@ -1,0 +1,22 @@
+conf
+#hostname config
+hostname testroute
+
+# ntp server config
+
+ntp server 10.1.1.1
+ntp server 11.1.1.1
+
+
+#vlan config
+vlan 100
+	name accessvlan
+vlan 200
+	name trunkvlan
+
+
+#default gateway
+ip route 0.0.0.0 0.0.0.0 40.1.1.1
+
+snmp-server user admin 
+snmp-server host 1.1.1.1 version 3
