@@ -540,6 +540,7 @@ func includeCmd(filename string) error {
 //Uses Mustache to render template + json into destination file
 //Optional shell script file to run after completion
 //WARNING: Destination file will be overwritten
+//TEST: TEMPLATE test.tmpl test.json testconfig.txt testecho.bat
 func templateCmd(args string) (err error) {
 
 	slcStr := strings.Split(args, " ")
