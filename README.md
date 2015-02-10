@@ -81,7 +81,7 @@ In short, configuration management is complementary to immutable infrastructure.
 How to Contribute
 -----------------
 
-- Speak out your use cases. I will look into it if it's meant to be included in the Anchor kernel
+- Speak out your use cases. I will look into it if it's meant to be included in the Anchor kernel. See <a href="https://godoc.org/github.com/ibmendoza/anchor"><img src="https://godoc.org/github.com/ibmendoza/anchor?status.svg" alt="GoDoc"></a>
 
 - A community of cmdfile akin to playbooks and recipes. For example, Vagrant workflow can be reduced to cmdfiles
 
