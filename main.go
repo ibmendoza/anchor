@@ -467,6 +467,8 @@ func ankoCmd(filename string) error {
 	}
 
 	file, err := os.Open(filename)
+	defer file.Close()
+
 	if err != nil {
 		printError(err)
 		return err
@@ -518,8 +520,6 @@ func ankoCmd(filename string) error {
 		printError(err)
 		return err
 	}
-
-	file.Close()
 
 	return err
 }
