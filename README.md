@@ -22,7 +22,7 @@ Push-based workflow
 
 A push-based workflow of configuration management is easier to reason about. Once you have gathered your artifacts like source code, binaries, files, images, etc to your control machine, for example a local computer or VM in public cloud, those artifacts can be pushed to your remote machine/host (the one being configured) through SSH.
 
-Pushing artifacts to multiple hosts in an efficient manner is left to the user or can be delegated to another project as separate orchestration tool.
+Pushing artifacts to multiple hosts in an efficient manner is left to the user or can be delegated to another project as separate orchestration tool (e.g. using github.com/wingedpig/loom or github.com/crosbymichael/slex).
 
 Don't reinvent the wheel
 ------------------------
