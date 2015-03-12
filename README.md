@@ -8,7 +8,7 @@ By itself, Anchor does not do anything. The secret sauce is in the cmdfile. Anch
 Use interface, not leaky abstraction
 ------------------------------------
 
-Anchor CM tool simply invokes the command-line interface (CLI) of infrastructure software (e.g. bash, serf, consul, OpenStack, AWS, gcutil, VBoxManage, etc).
+Anchor CM tool invokes the command-line interface (CLI) of infrastructure software (e.g. bash, serf, consul, OpenStack, AWS, gcutil, VBoxManage, etc).
 
 Chef, Puppet, Ansible and Salt are leaky abstractions like ORM, forever chasing a moving target which is the CLI of programs that actually matter. 
 
@@ -22,7 +22,7 @@ Push-based workflow
 
 A push-based workflow of configuration management is easier to reason about. Once you have gathered your artifacts like source code, binaries, files, images, etc to your control machine, for example a local computer or VM in public cloud, those artifacts can be pushed to your remote machine/host (the one being configured) through SSH.
 
-Pushing artifacts to multiple hosts in an efficient manner is left to the user or can be relegated to another project as separate orchestration tool.
+Pushing artifacts to multiple hosts in an efficient manner is left to the user or can be delegated to another project as separate orchestration tool.
 
 Don't reinvent the wheel
 ------------------------
