@@ -231,7 +231,8 @@ func runflagCmd(args string, cmdfile ini.File) error {
 		// ::network
 		section := slcArgs[1]
 
-		var flags string
+		var val, flags string
+		var e error
 
 		for key, value := range cmdfile[section] {
 
@@ -239,10 +240,10 @@ func runflagCmd(args string, cmdfile ini.File) error {
 			//nic1 = bridged
 			//nic2 = hostonly
 
-			val, err := eval(value)
+			val, e = eval(value)
 
-			if err != nil {
-				printError(err)
+			if e != nil {
+				printError(e)
 				break
 				//return err
 
@@ -252,8 +253,8 @@ func runflagCmd(args string, cmdfile ini.File) error {
 			}
 		}
 
-		if err != nil {
-			return err
+		if e != nil {
+			return e
 		}
 
 		fmt.Println(args1 + flags)
