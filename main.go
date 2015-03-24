@@ -243,12 +243,17 @@ func runflagCmd(args string, cmdfile ini.File) error {
 
 			if err != nil {
 				printError(err)
-				return err
+				break
+				//return err
 
 			} else {
 
 				flags = flags + strDash + key + " " + val
 			}
+		}
+
+		if err != nil {
+			return err
 		}
 
 		fmt.Println(args1 + flags)
