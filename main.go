@@ -243,7 +243,6 @@ func runflagCmd(args string, cmdfile ini.File) error {
 
 			if err != nil {
 				printError(err)
-				//break
 				return err
 
 			} else {
