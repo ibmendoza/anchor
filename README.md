@@ -32,7 +32,7 @@ A shell script is the simplest form of infrastructure as data but it has limitat
 
 Dockerfile is simple and intuitive but it is limited to Docker containers only. 
 
-Taking a cue from Dockerfile, we can design a script file called but not to be executed by your favorite shell. Instead, it will be executed by our CM runtime such that it follows the principles described in this README file.
+Taking a cue from Dockerfile, we can design a script file called cmdfile but not to be executed by your favorite shell. Instead, it will be executed by Anchor runtime such that it follows the principles described in this README file.
 
 The cmdfile is a virtual script since it is preprocessed by the CM runtime.
 
@@ -41,7 +41,7 @@ See https://github.com/ibmendoza/anchor/blob/master/DSL.md for DSL specification
 Infrastructure as code
 ----------------------
 
-Like developer code, a cmdfile must be tested and stored in a version control system along with config files and others. Large binary files like OS images must be stored elsewhere (file store or object storage)
+Like developer code, a cmdfile must be tested and stored in a version control system along with config files and others. 
 
 Simple error handling
 ---------------------
@@ -51,7 +51,7 @@ The CM tool must stop execution at the first occurrence of error.
 Tool-agnostic
 -------------
 
-Any software tool or runtime can be used as long as it exposes a CLI (command line interface). There is no need to prepackage the tool into a CM module since the tool itself acts as the module. Anchor CM is simply a glue that holds and orchestrates a certain process or workflow. Hence, you can use any of your favorite shell or scripting language
+You can configure any machine regardless of built-in scripting language or shell since Anchor CM is simply a glue that orchestrates a certain process or workflow.
 
 Linux and Windows
 -----------------
@@ -70,7 +70,7 @@ anchor /path/to/cmdfile
 Mutable vs Immutable Infrastructure
 ===================================
 
-Immutable infrastructure as defined by Codeship (http://blog.codeship.com/immutable-deployments/) works best for servers that work at the application tier (see http://en.wikipedia.org/wiki/Multitier_architecture). However, it is not a silver bullet particularly at the data tier. Configuration management is a fine-grained solution to situations where an all-or-nothing old-server-teardown/spin-new-server workflow is not acceptable.
+Immutable infrastructure as defined by Codeship (http://blog.codeship.com/immutable-deployments/) works best for servers that work at the application tier (see http://en.wikipedia.org/wiki/Multitier_architecture). However, it is not a silver bullet particularly at the data tier. Configuration management is a fine-grained solution where an all-or-nothing old-server-teardown/spin-new-server workflow is not feasible.
 
 In short, configuration management is complementary to immutable infrastructure. You just need to know the differences  where it matters.
 
