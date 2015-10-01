@@ -29,7 +29,7 @@ The CM tool must stop execution at the first occurrence of error.
 Anchor on server-side, easyssh on client-side
 ---------------------------------------------
 
-Anchor is used to configure remote servers, [easyssh](https://github.com/ibmendoza/easyssh) is used to scp files to remote server and run ssh command on the client side
+Anchor is used to configure remote servers, [easyssh](https://github.com/ibmendoza/anchor/blob/master/easyssh/main.go) is used to scp files to remote server and run ssh command on the client side
 
 
 Usage
