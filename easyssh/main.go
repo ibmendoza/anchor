@@ -20,6 +20,10 @@ func main() {
 
 	flag.Parse()
 
+	if *user == "" || *server == "" {
+		log.Fatal("User and server cannot be blank")
+	}
+
 	ssh := &easyssh.MakeConfig{
 		User:     *user,
 		Server:   *server,
