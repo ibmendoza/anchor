@@ -68,20 +68,6 @@ import (
 	"github.com/daviddengcn/go-colortext"
 	"github.com/hoisie/mustache"
 	"github.com/ibmendoza/go-ini"
-	anko_core "github.com/mattn/anko/builtins"
-	anko_encoding "github.com/mattn/anko/builtins/encoding"
-	anko_flag "github.com/mattn/anko/builtins/flag"
-	anko_io "github.com/mattn/anko/builtins/io"
-	anko_math "github.com/mattn/anko/builtins/math"
-	anko_net "github.com/mattn/anko/builtins/net"
-	anko_os "github.com/mattn/anko/builtins/os"
-	anko_path "github.com/mattn/anko/builtins/path"
-	anko_regexp "github.com/mattn/anko/builtins/regexp"
-	anko_sort "github.com/mattn/anko/builtins/sort"
-	anko_strings "github.com/mattn/anko/builtins/strings"
-	anko_term "github.com/mattn/anko/builtins/term"
-	"github.com/mattn/anko/parser"
-	"github.com/mattn/anko/vm"
 	"io/ioutil"
 	"log"
 	"os"
@@ -462,6 +448,7 @@ func goCmd(argCommand string, args []string) error {
 	return err
 }
 
+/*
 func ankoCmd(filename string) error {
 	fmt.Println("ANKO " + filename)
 
@@ -528,6 +515,7 @@ func ankoCmd(filename string) error {
 
 	return err
 }
+*/
 
 func includeCmd(filename string) error {
 
@@ -684,10 +672,10 @@ func processCmd(command string, cmdfile ini.File) error {
 	case "ENV":
 		err = setenvCmd(argCommand, args[0])
 
-	case "ANKO":
-		ankoFilename := argCommand
-		err = ankoCmd(ankoFilename)
-
+		/*	case "ANKO":
+			ankoFilename := argCommand
+			err = ankoCmd(ankoFilename)
+		*/
 	case "RUNFLAG":
 		err = runflagCmd(strings.Join(slcStr[1:], " "), cmdfile)
 
