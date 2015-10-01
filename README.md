@@ -57,12 +57,12 @@ C:\mygo\src\github.com\ibmendoza\easyssh\example>anchor cmd.txt
 ```
 C:\mygo\src\github.com\ibmendoza\easyssh\example>anchor cmd.txt
 RUN
-example2 -user root -server 192.168.56.101 -keypath id_rsa -cmd uptime
+easyssh -user root -server 192.168.56.101 -keypath id_rsa -cmd uptime
 ==> OUTPUT:  03:39:03 up 4 min,  0 users,  load average: 0.01, 0.05, 0.04
 
 
 RUN
-example2 -user root -server 192.168.56.102 -keypath id_rsa -cmd uptime
+easyssh -user root -server 192.168.56.102 -keypath id_rsa -cmd uptime
 ==> OUTPUT:  03:39:03 up 3 min,  0 users,  load average: 0.01, 0.03, 0.02
 
 
