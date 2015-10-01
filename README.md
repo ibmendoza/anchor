@@ -37,7 +37,7 @@ Usage
 
 Assuming you have already uploaded anchor executable to remote servers as well as the corresponding cmdfile, you may also use Anchor on the client side to batch execute commands on the remote servers.
 
-### On the remote servers
+#### uptime will be executed on remote servers
 ```
 #cmd.txt
 
@@ -46,13 +46,13 @@ RUN easyssh -user root -server 192.168.56.101 -keypath id_rsa -cmd uptime
 RUN easyssh -user root -server 192.168.56.102 -keypath id_rsa -cmd uptime
 ```
 
-### On client side (Windows or Linux)
+#### On client side (Windows or Linux)
 
 ```
-C:\mygo\src\github.com\ibmendoza\easyssh\example2>anchor cmd.txt
+C:\mygo\src\github.com\ibmendoza\easyssh\example>anchor cmd.txt
 ```
 
-### Output
+#### Output
 
 ```
 C:\mygo\src\github.com\ibmendoza\easyssh\example2>anchor cmd.txt
