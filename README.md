@@ -35,10 +35,39 @@ Anchor is used to configure remote servers, [easyssh](https://github.com/ibmendo
 Usage
 -----
 
-```
-go get github.com/ibmendoza/anchor
+Assuming you have already uploaded anchor executable to remote servers as well as the corresponding cmdfile, you may also use Anchor on the client side to batch execute commands on the remote servers.
 
-anchor /path/to/cmdfile
+### On the remote servers
+```
+#cmd.txt
+
+[code]
+RUN easyssh -user root -server 192.168.56.101 -keypath id_rsa -cmd uptime
+RUN easyssh -user root -server 192.168.56.102 -keypath id_rsa -cmd uptime
+```
+
+### On client side (Windows or Linux)
+
+```
+C:\mygo\src\github.com\ibmendoza\easyssh\example2>anchor cmd.txt
+```
+
+### Output
+
+```
+C:\mygo\src\github.com\ibmendoza\easyssh\example2>anchor cmd.txt
+RUN
+example2 -user root -server 192.168.56.101 -keypath id_rsa -cmd uptime
+==> OUTPUT:  03:39:03 up 4 min,  0 users,  load average: 0.01, 0.05, 0.04
+
+
+RUN
+example2 -user root -server 192.168.56.102 -keypath id_rsa -cmd uptime
+==> OUTPUT:  03:39:03 up 3 min,  0 users,  load average: 0.01, 0.03, 0.02
+
+
+
+If any error appears, cmdfile run is not completed
 ```
 
 License
