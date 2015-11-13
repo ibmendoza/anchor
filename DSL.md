@@ -132,14 +132,6 @@ GO getenv environmentvariable
 GO hostname
 ```
 
-ANKO
-
-```
-# Go-specific since it has no built-in scripting
-
-ANKO /path/to/ankoscriptfile
-```
-
 RUN
 
 ```script
